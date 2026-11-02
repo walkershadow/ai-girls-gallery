@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIモデル顔データベース</title>
+<meta name="description" content="AI画像・動画制作でキャラクターの顔を一貫させるためのリファレンス画像集。正面向きの「フェイス」と、服装や雰囲気まで分かる「スタイリング」をCC0で自由に配布。">
+<meta property="og:title" content="AIモデル顔データベース">
+<meta property="og:description" content="AI画像・動画制作でキャラクターの顔を一貫させるためのリファレンス画像集。正面向きの「フェイス」と、服装や雰囲気まで分かる「スタイリング」をCC0で自由に配布。">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap topbar">
+    <a class="brand" href="./" aria-label="AIモデル顔データベース トップ">
+      <span class="brand-mark">F</span><span class="brand-text">FACE&nbsp;REFERENCE</span>
+    </a>
+    <nav class="nav" aria-label="メニュー">
+      <a href="#tips">使い方<span class="m-hide">のヒント</span></a>
+      <a href="#rules">利用ルール</a>
+      <a class="nav-line" href="https://line.me/ti/g2/ZQBZxnZLhu9hLVp-t6vfakvNXkiEQQnvXbEapQ?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" target="_blank" rel="noopener" aria-label="LINEオープンチャットに参加する（新しいタブ）"><i class="line-dot" aria-hidden="true"></i><span class="nl-long">オープンチャット</span><span class="nl-short">LINE</span></a>
+      <a class="nav-x" href="https://x.com/agi_aibusi" target="_blank" rel="noopener">運営：あぎ</a>
+    </nav>
+  </div>
+  <section class="wrap hero">
+    <div class="hero-copy">
+      <p class="eyebrow"><span>Free Face Reference Library</span></p>
+      <h1>AIモデル<br>顔データベース</h1>
+      <p class="lead">AI画像・動画制作でキャラクターの顔を一貫させるためのリファレンス画像集。正面向きの「フェイス」と、服装や雰囲気まで分かる「スタイリング」を、CC0で自由に配布。</p>
+      <dl class="stats">
+        <div><dt>フェイス</dt><dd id="stat-face">—</dd></div>
+        <div><dt>スタイリング</dt><dd id="stat-styling">—</dd></div>
+        <div><dt>ライセンス</dt><dd>CC0</dd></div>
+      </dl>
+      <div class="cta-row">
+        <a class="cta" href="#gallery">ギャラリーを見る<span aria-hidden="true">→</span></a>
+        <a class="cta-line" href="https://line.me/ti/g2/ZQBZxnZLhu9hLVp-t6vfakvNXkiEQQnvXbEapQ?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" target="_blank" rel="noopener"><i class="line-dot" aria-hidden="true"></i>LINEオープンチャットに参加する</a>
+      </div>
+      <p class="cta-note">この画像の活用事例、画像生成プロンプトはあぎのLINEオープンチャット限定で公開しています</p>
+    </div>
+    <div id="hero-faces" class="hero-faces" aria-hidden="true"></div>
+  </section>
+</header>
+
+<main class="wrap" id="gallery">
+  <section id="ranking" class="ranking" aria-labelledby="ranking-title" hidden>
+    <div class="ranking-head">
+      <h2 class="section-title" id="ranking-title">Ranking<span>ダウンロード Top10</span></h2>
+    </div>
+    <div id="rank-tabs" class="rank-tabs" role="tablist" aria-label="ランキングの種類"></div>
+    <ol id="rank-list" class="rank-list" role="tabpanel" aria-labelledby="ranking-title"></ol>
+  </section>
+
+  <div class="toolbar">
+    <div class="toolbar-head">
+      <h2 class="section-title">Gallery<span>髪型で絞り込み</span></h2>
+      <p id="count" class="count" aria-live="polite"></p>
+    </div>
+    <div id="sections" class="sections" role="tablist" aria-label="セクション">
+      <button type="button" class="seg" role="tab" data-sec="face" id="tab-face" aria-controls="grid"><span class="seg-en">Face</span><span class="seg-ja">フェイス</span><small id="n-face"></small></button>
+      <button type="button" class="seg" role="tab" data-sec="styling" id="tab-styling" aria-controls="grid"><span class="seg-en">Styling</span><span class="seg-ja">スタイリング</span><small id="n-styling"></small></button>
+    </div>
+    <p id="sec-note" class="sec-note"></p>
+    <div id="filters" class="filters" role="group" aria-label="髪型で絞り込み"></div>
+  </div>
+
+  <ul id="grid" class="grid"></ul>
+  <p id="empty" class="empty" hidden>該当する画像がありません。</p>
+  <div class="more-wrap">
+    <button id="more" class="btn" type="button" hidden>もっと見る</button>
+  </div>
+  <div id="sentinel" aria-hidden="true"></div>
+
+  <section id="tips" class="tips">
+    <h2>使い方のヒント</h2>
+    <ul>
+      <li>参照画像として、各種AIツールのキャラクター参照・顔参照機能に読み込みます。</li>
+      <li>顔を揃えたいときは「フェイス」、服装・髪の質感・雰囲気の参考には「スタイリング」が向いています。</li>
+      <li>同じ画像を使い続けると、生成する画像・動画の顔が揃いやすくなります。</li>
+      <li>元サイズのPNGをダウンロードして使うと、細部まで参照できます。</li>
+    </ul>
+  </section>
+
+  <section id="rules" class="rules">
+    <h2>利用ルール</h2>
+    <ul>
+      <li>CC0で自由に利用可（商用利用・編集・参考利用OK）</li>
+      <li>AI生成の架空の人物で、実在しません</li>
+      <li>実在人物のなりすましや公序良俗に反する用途は不可</li>
+      <li>画像データそのものの再配布・転載はご遠慮ください（お願い）。</li>
+    </ul>
+    <p class="note">
+      CC0 1.0 の説明：<a href="https://creativecommons.org/publicdomain/zero/1.0/deed.ja" target="_blank" rel="noopener">https://creativecommons.org/publicdomain/zero/1.0/deed.ja</a><br>
+      クレジット表記は不要です（任意）。画像のメタデータは削除済みです。無保証でご利用ください。
+    </p>
+  </section>
+</main>
+
+<section class="community" aria-labelledby="community-title">
+  <div class="wrap community-inner">
+    <div class="community-copy">
+      <p class="eyebrow"><span>Community</span></p>
+      <h2 id="community-title">この画像の活用事例を紹介しています</h2>
+      <p>フェイス・スタイリングの画像を使った活用事例を、あぎのLINEオープンチャットで紹介しています。お気軽にご参加ください。</p>
+    </div>
+    <a class="cta cta-community" href="https://line.me/ti/g2/ZQBZxnZLhu9hLVp-t6vfakvNXkiEQQnvXbEapQ?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" target="_blank" rel="noopener"><i class="line-dot" aria-hidden="true"></i>LINEオープンチャットに参加する<span aria-hidden="true">→</span></a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <a href="https://x.com/agi_aibusi" target="_blank" rel="noopener">運営：あぎ</a>
+    <span> ／ </span><a href="https://line.me/ti/g2/ZQBZxnZLhu9hLVp-t6vfakvNXkiEQQnvXbEapQ?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" target="_blank" rel="noopener">LINEオープンチャット（活用事例）</a>
+    <span> ／ CC0 1.0</span>
+  </div>
+</footer>
+
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="画像プレビュー" hidden>
+  <button id="lb-close" class="lb-btn lb-close" type="button" aria-label="閉じる">×</button>
+  <button id="lb-prev" class="lb-btn lb-prev" type="button" aria-label="前へ">‹</button>
+  <button id="lb-next" class="lb-btn lb-next" type="button" aria-label="次へ">›</button>
+  <figure class="lb-figure">
+    <img id="lb-img" alt="">
+    <figcaption>
+      <span id="lb-label"></span>
+      <a id="lb-dl" class="btn btn-primary" href="#" download>ダウンロード</a>
+      <a class="lb-line" href="https://line.me/ti/g2/ZQBZxnZLhu9hLVp-t6vfakvNXkiEQQnvXbEapQ?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" target="_blank" rel="noopener"><i class="line-dot" aria-hidden="true"></i>活用事例はLINEオープンチャットで</a>
+    </figcaption>
+  </figure>
+</div>
+
+<dialog id="info-dialog" class="info-dialog" aria-label="情報">
+  <button id="info-close" class="dlg-close" type="button" aria-label="閉じる">×</button>
+  <div id="info-body"></div>
+</dialog>
+
+<script src="data/images.js"></script>
+<script src="data/ranking.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

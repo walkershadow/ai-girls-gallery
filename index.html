@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Reference Library</title>
+<style>
+:root{--bg:#f6f6f4;--panel:#fff;--line:#ddddd8;--tx:#1d1f23;--tx2:#5c616b;--ac:#2f5fd0;--acbg:#e6ecfb}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1114;--panel:#191c21;--line:#2d3138;--tx:#e9ecf1;--tx2:#a3abb8;--ac:#8fb4ff;--acbg:#1f2a40}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 system-ui,-apple-system,"PingFang SC","Hiragino Sans","Noto Sans CJK SC",sans-serif}
+button,select,input{font:inherit;color:inherit}
+header{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
+.top,.bar,main,.about{max-width:1500px;margin:0 auto;padding-left:16px;padding-right:16px}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding-top:10px;padding-bottom:10px}
+.brand{font-weight:700;margin-right:auto}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:none;padding:6px 12px;cursor:pointer;min-height:36px}
+.seg button[aria-pressed=true]{background:var(--acbg);color:var(--ac);font-weight:700}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:10px;padding-bottom:10px;border-top:1px solid var(--line)}
+.chip{border:1px solid var(--line);background:none;border-radius:99px;padding:4px 12px;cursor:pointer;min-height:34px}
+.chip[aria-pressed=true]{border-color:var(--ac);color:var(--ac);background:var(--acbg)}
+.chip small{color:var(--tx2);margin-left:4px}
+input[type=search],select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 10px;min-height:36px;max-width:100%}
+input[type=search]{flex:1 1 200px}
+.count{color:var(--tx2);font-size:13px;margin-left:auto}
+.about{padding-top:14px}
+.about details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.about summary{cursor:pointer;font-weight:600}
+.about h3{margin:12px 0 2px;font-size:14px}.about ul{margin:4px 0;padding-left:20px}
+main{padding-top:14px;padding-bottom:40px}
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.card button{border:0;padding:0;background:none;cursor:pointer;text-align:left;display:block;width:100%}
+.thumb{aspect-ratio:3/4;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--tx2);font-size:12px;text-align:center;padding:0}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{padding:7px 9px;font-size:13px;overflow-wrap:anywhere}
+.cap small{display:block;color:var(--tx2);font-size:11px}
+#sentinel{height:1px}
+.empty{color:var(--tx2);text-align:center;padding:40px 0}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal[hidden]{display:none}
+.box{background:var(--panel);border-radius:12px;display:flex;max-width:1100px;width:100%;max-height:100%;overflow:auto}
+.box .pic{flex:1 1 60%;min-width:0;background:#000;display:flex;align-items:center;justify-content:center;color:#ccc;min-height:240px}
+.box img{max-width:100%;max-height:88vh;display:block}
+.side{flex:0 0 300px;padding:16px;overflow-wrap:anywhere}
+.side h2{font-size:17px;margin:0 0 6px}.side p{margin:4px 0;color:var(--tx2);font-size:13px}
+.side .acts{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.side a.btn,.side button.btn{display:inline-block;background:var(--acbg);color:var(--ac);border:0;border-radius:8px;padding:7px 12px;text-decoration:none;cursor:pointer}
+@media (max-width:760px){.box{flex-direction:column}.side{flex:none}.grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="brand" id="brand"></div>
+    <div class="seg" id="sites"></div>
+    <div class="seg" id="langs"></div>
+  </div>
+  <div class="bar" id="bar"></div>
+</header>
+<div class="about"><details><summary id="aboutT"></summary><div id="about"></div></details></div>
+<main><ul class="grid" id="grid"></ul><p class="empty" id="empty" hidden></p><div id="sentinel"></div></main>
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true"><div class="box">
+  <div class="pic" id="pic"></div>
+  <div class="side" id="side"></div>
+</div></div>
+<script src="data/terms.js"></script>
+<script src="data/words.js"></script>
+<script src="data/portrait.js"></script>
+<script src="data/ranking.js"></script>
+<script src="data/costume.js"></script>
+<script src="data/pose.js"></script>
+<script src="data/depth.js"></script>
+<script src="data/text.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

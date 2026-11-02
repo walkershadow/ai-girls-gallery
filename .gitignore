@@ -1,0 +1,12 @@
+# Only thumbnails are published; larger images stay local and load from the source sites online
+portrait/img/full/
+costume/img/
+costume/png/
+pose/img/
+depth/img/
+
+# Bulk fetchers: only the repository owner has the creators' permission
+tools/fetch_*.py
+
+*.tmp
+.DS_Store
