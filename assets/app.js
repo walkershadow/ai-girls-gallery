@@ -70,7 +70,7 @@
   function render() {
     var mix = st.site === "mix";
     $("grid").hidden = mix; $("mixv").hidden = !mix;
-    if (mix) { list = []; $("empty").hidden = true; window.Mix.show($("mixv")); return; }
+    if (mix) { list = []; shown = 0; $("grid").textContent = ""; $("empty").hidden = true; window.Mix.show($("mixv")); window.scrollTo(0, 0); return; }
     var q = st.q.trim().toLowerCase();
     var base = source();
     list = q ? base.filter(function (x) { return haystack(x).indexOf(q) >= 0; }) : base;
