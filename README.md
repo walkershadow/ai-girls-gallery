@@ -25,6 +25,14 @@ A face, an outfit and a pose from this library, combined into one consistent ima
 
 Features: switch language (EN / 中文 / 日本語), search in any of the three languages, filter by category, open details with angle switching, and read each source site's tips and rules in the "About" panel.
 
+**Mix:** combine one face, one outfit and one pose into a prompt.
+
+- Pick items with "Use in Mix" while browsing, or roll at random. Locked slots stay put.
+- Choose the pose as line art, depth or both, from 5 camera angles.
+- Get the prompt in English, Chinese or Japanese, written either for chat models (GPT, Gemini, Seedream…) or as SD / ComfyUI tags with IP-Adapter / ControlNet settings.
+- Download a numbered reference board for tools that accept only one image.
+- Each mix has its own link.
+
 Some pose names describe adult and intimate poses. All figures are mannequins or fictional AI-generated people.
 
 ## Use it
@@ -64,6 +72,7 @@ The page code, translations and scripts in this repository are by [walkershadow]
 ```
 index.html              The page (works from file:// and on GitHub Pages)
 assets/app.js           Page logic
+assets/mix.js           Mix tab: prompts and reference board
 data/                   Generated metadata, translations and UI text
 source/                 Original pages and metadata from the source sites
 tools/build.py          Rebuilds data/*.js from source/ and tools/i18n_*.tsv

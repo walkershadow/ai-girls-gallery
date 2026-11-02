@@ -25,6 +25,14 @@
 
 功能：切换语言（EN / 中文 / 日本語），可用任一语言搜索，按分类筛选，查看详情并切换角度；“关于”面板里有各原站的使用提示和规则。
 
+**搭配台：** 把一张脸、一套服装、一个姿势组合成提示词。
+
+- 浏览时点“放入搭配台”挑选，或随机抽取；锁定的格子不会被换掉。
+- 姿势可选线稿、深度或两者都用，并可切换 5 个机位。
+- 提示词有中、英、日三种语言，可以写给对话式模型（GPT、Gemini、即梦等），也可以写成 SD / ComfyUI 标签，并附 IP-Adapter / ControlNet 设置建议。
+- 可下载带编号的参考板，给只能上传一张图的工具用。
+- 每个组合都有自己的链接。
+
 部分姿势名称描述的是成人向、亲密类姿势。所有人物均为人体模型或 AI 生成的虚构人物。
 
 ## 使用方式
@@ -64,6 +72,7 @@ git clone https://github.com/walkershadow/ai-girls-gallery.git
 ```
 index.html              页面（file:// 和 GitHub Pages 均可使用）
 assets/app.js           页面逻辑
+assets/mix.js           搭配台：提示词与参考板
 data/                   生成的元数据、译文和界面文字
 source/                 原站的网页和元数据
 tools/build.py          从 source/ 和 tools/i18n_*.tsv 重新生成 data/*.js

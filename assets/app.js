@@ -9,6 +9,7 @@
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
   st.lang = store("lang") || "zh";
   if (!window.UI[st.lang]) st.lang = "zh";
+  if (/^#mix/.test(location.hash)) st.site = "mix";
 
   function group(items) {
     var m = {}, out = [];
@@ -34,7 +35,15 @@
   }
   function allT(ja) { var e = window.T[ja] || {}; return [ja, e.zh, e.en].join(" "); }
   function allKw(s) { return s.split(" ").map(function (w) { var e = window.W[w] || {}; return [w, e.zh, e.ja].join(" "); }).join(" "); }
-  function remote(p) { return window.SITE[st.site].url + p.slice(p.indexOf("/") + 1); }
+  function remoteOf(site, p) { return window.SITE[site].url + p.slice(p.indexOf("/") + 1); }
+  function remote(p) { return remoteOf(st.site, p); }
+  /* Link to a local original when it exists, otherwise to the same file on the source site */
+  function fullLink(a, site, p) {
+    a.href = p; a.target = "_blank"; a.rel = "noopener noreferrer";
+    var probe = new Image();
+    probe.onerror = function () { a.href = remoteOf(site, p); };
+    probe.src = p;
+  }
   function mb(n) { return (n / 1048576).toFixed(1) + " MB"; }
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; }
 
@@ -59,6 +68,9 @@
   }
 
   function render() {
+    var mix = st.site === "mix";
+    $("grid").hidden = mix; $("mixv").hidden = !mix;
+    if (mix) { list = []; $("empty").hidden = true; window.Mix.show($("mixv")); return; }
     var q = st.q.trim().toLowerCase();
     var base = source();
     list = q ? base.filter(function (x) { return haystack(x).indexOf(q) >= 0; }) : base;
@@ -92,6 +104,7 @@
   function bar() {
     var b = $("bar");
     b.textContent = "";
+    if (st.site === "mix") { window.Mix.bar(b); return; }
     if (st.site === "portrait") {
       ["face", "styling"].forEach(function (s) {
         b.appendChild(chip(u(s), window.PORTRAIT.filter(function (x) { return x.sec === s; }).length, !st.top && st.sec === s, function () { st.sec = s; st.top = false; st.filter = "all"; bar(); render(); }));
@@ -197,6 +210,8 @@
     var acts = el("div", "acts");
     acts.appendChild(d);
     var mk = function (lab, fn) { var b = el("button", "btn", lab); b.type = "button"; b.addEventListener("click", fn); return b; };
+    var site = st.site, ai = angIdx;
+    acts.appendChild(mk(u("toMix"), function () { window.Mix.put(site, x, ai); this.textContent = u("toMixed"); this.disabled = true; }));
     acts.appendChild(mk(u("prev"), function () { step(-1); }));
     acts.appendChild(mk(u("next"), function () { step(1); }));
     acts.appendChild(mk(u("close"), close));
@@ -204,8 +219,9 @@
   }
 
   function about() {
-    var s = window.SITE[st.site], d = s[st.lang], a = $("about");
+    var s = window.SITE[st.site], d = s ? s[st.lang] : window.MIXT[st.lang].about, a = $("about");
     a.textContent = "";
+    $("aboutT").textContent = u("about");
     a.appendChild(el("p", "", d.intro));
     [["tips", d.tips], ["rules", d.rules]].forEach(function (p) {
       a.appendChild(el("h3", "", u(p[0])));
@@ -213,9 +229,9 @@
       p[1].forEach(function (l) { ul.appendChild(el("li", "", l)); });
       a.appendChild(ul);
     });
+    if (!s) return;
     var src = el("a", "", s.url); src.href = s.url; src.target = "_blank"; src.rel = "noopener noreferrer";
     a.appendChild(src);
-    $("aboutT").textContent = u("about");
   }
 
   function head() {
@@ -224,14 +240,16 @@
     document.title = u("brand");
     var ss = $("sites"), ls = $("langs");
     ss.textContent = ""; ls.textContent = "";
-    ["portrait", "costume", "pose", "depth"].forEach(function (k) {
+    ["portrait", "costume", "pose", "depth", "mix"].forEach(function (k) {
       var b = el("button", "", u(k));
       b.type = "button"; b.setAttribute("aria-pressed", st.site === k ? "true" : "false");
       b.addEventListener("click", function () {
         st.site = k; st.filter = "all"; st.cat = "all"; st.q = ""; st.top = false;
+        if (k !== "mix" && location.hash) try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* ignore */ }
         all();
       });
       ss.appendChild(b);
+      if (st.site === k) ss.scrollLeft = b.offsetLeft - 24;
     });
     [["zh", "中文"], ["en", "EN"], ["ja", "日本語"]].forEach(function (p) {
       var b = el("button", "", p[1]);
@@ -243,9 +261,13 @@
 
   function all() { head(); bar(); about(); render(); }
 
+  window.Mix.init({
+    lang: function () { return st.lang; }, site: function () { return st.site; },
+    groups: groups, el: el, store: store, remote: remoteOf, full: fullLink, rebar: bar
+  });
   $("modal").addEventListener("click", function (e) { if (e.target === $("modal")) close(); });
   document.addEventListener("keydown", function (e) {
-    if ($("modal").hidden) return;
+    if ($("modal").hidden) { if (st.site === "mix") window.Mix.key(e); return; }
     if (e.key === "Escape") close();
     else if (e.key === "ArrowLeft") step(-1);
     else if (e.key === "ArrowRight") step(1);
